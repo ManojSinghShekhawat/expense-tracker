@@ -1,9 +1,8 @@
-import React from "react";
-import { Box, HStack, Text } from "@chakra-ui/react";
-import { HiOutlineDotsVertical } from "react-icons/hi";
+import React, { useState, useEffect } from "react";
+import { Box, HStack, Text, Spinner } from "@chakra-ui/react";
 import SideNav from "./SideNav";
-import { Link } from "react-router-dom";
 import { Login } from "./Login";
+import axios from "axios";
 
 const Header = () => {
   return (

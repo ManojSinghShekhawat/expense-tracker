@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const UserModel = require("./userModel");
-const ErrorHandler = require("../utils/errorHandler");
+const UserModel = require("../models/userModel");
+const ErrorHandler = require("./errorHandler");
 const asyncErrorHandler = require("../middleware/asyncErrorHandler");
 
-exports.isAutheticated = asyncErrorHandler(async (req, res, next) => {
+exports.isAuthenticated = asyncErrorHandler(async (req, res, next) => {
   const { token } = req.cookies;
   if (!token) {
     return next(new ErrorHandler("Please login first", 401));

@@ -46,7 +46,7 @@ const CredditCards = () => {
             overflowX={"hidden"}
           >
             {creditCards.map((card) => (
-              <>
+              <React.Fragment key={card._id}>
                 <HStack
                   alignItems={"center"}
                   position="relative"
@@ -76,7 +76,7 @@ const CredditCards = () => {
                   </Box>
                   <Text mr={"5rem"}>{spentPer}%</Text>
                 </HStack>
-              </>
+              </React.Fragment>
             ))}
           </VStack>
         </Card>

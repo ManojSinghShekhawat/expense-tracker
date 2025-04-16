@@ -45,12 +45,8 @@ const AccountCard = () => {
             overflowX={"hidden"}
           >
             {accounts.map((acc, index) => (
-              <>
-                <HStack
-                  key={index}
-                  justifyContent={"space-between"}
-                  width={"full"}
-                >
+              <React.Fragment key={acc._id}>
+                <HStack justifyContent={"space-between"} width={"full"}>
                   <CardBody>
                     <Text position="relative">{acc.name}</Text>
                   </CardBody>
@@ -61,7 +57,7 @@ const AccountCard = () => {
                   </CardBody>
                 </HStack>
                 <Divider borderColor="gray.400" borderBottomWidth="2px" />
-              </>
+              </React.Fragment>
             ))}
           </VStack>
         </Card>

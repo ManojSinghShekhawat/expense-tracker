@@ -68,7 +68,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Overview</Link>
+                    <Link to="/" onClick={onClose}>
+                      Overview
+                    </Link>
                   </HStack>
                   <HStack>
                     <TfiMenuAlt
@@ -76,7 +78,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="transactions">Transactions</Link>
+                    <Link to="/transactions" onClick={onClose}>
+                      Transactions
+                    </Link>
                   </HStack>
                   <HStack>
                     <TbBuildingBank
@@ -84,7 +88,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="/accounts">Accounts</Link>
+                    <Link to="/accounts" onClick={onClose}>
+                      Accounts
+                    </Link>
                   </HStack>
 
                   <HStack>
@@ -93,7 +99,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="/budgets">Budgest</Link>
+                    <Link to="/budgets" onClick={onClose}>
+                      Budgest
+                    </Link>
                   </HStack>
                   <HStack>
                     <MdOutlineCurrencyRupee
@@ -101,7 +109,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Debts</Link>
+                    <Link to="" onClick={onClose}>
+                      Debts
+                    </Link>
                   </HStack>
                 </VStack>
                 <VStack align={"self"} borderBottom={"2px solid gray"}>
@@ -111,7 +121,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Import</Link>
+                    <Link to="" onClick={onClose}>
+                      Import
+                    </Link>
                   </HStack>
                   <HStack>
                     <TbDeviceMobileShare
@@ -119,7 +131,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Preferance</Link>
+                    <Link to="" onClick={onClose}>
+                      Preferance
+                    </Link>
                   </HStack>
                   <HStack>
                     <MdCloudSync
@@ -127,7 +141,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Bank Sync</Link>
+                    <Link to="" onClick={onClose}>
+                      Bank Sync
+                    </Link>
                   </HStack>
                 </VStack>
                 <VStack align={"self"}>
@@ -137,7 +153,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Setting</Link>
+                    <Link to="" onClick={onClose}>
+                      Setting
+                    </Link>
                   </HStack>
                   <HStack>
                     <MdOutlineHelpOutline
@@ -145,7 +163,9 @@ const SideNav = () => {
                         "margin-right": "10px",
                       }}
                     />
-                    <Link to="">Help</Link>
+                    <Link to="" onClick={onClose}>
+                      Help
+                    </Link>
                   </HStack>
                 </VStack>
               </VStack>

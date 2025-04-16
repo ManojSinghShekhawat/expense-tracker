@@ -9,7 +9,6 @@ const {
   getAllTransaction,
   getFilterTransaction,
 } = require("../controllers/transactionController");
-const { isAutheticated } = require("../models/authCheck");
 
 // const deleteTransaction = require("../controllers/transactionController");
 const router = express.Router();

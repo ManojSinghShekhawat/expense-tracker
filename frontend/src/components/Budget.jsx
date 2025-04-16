@@ -33,7 +33,6 @@ const Budget = () => {
       try {
         const res = await axios.get("http://localhost:4000/api/v1/budget");
         setBudgets(res.data.budgets);
-        console.log(res.data.budgets);
       } catch (error) {
         console.log(error);
       }
