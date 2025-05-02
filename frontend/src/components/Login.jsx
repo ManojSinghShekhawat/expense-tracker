@@ -15,18 +15,17 @@ import {
   InputGroup,
   Text,
   useToast,
-  Link,
-  Spinner,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess, logout } from "../redux/slices/authSlice";
 
 export const Login = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const [isLogin, setIsLogin] = useState(false);
@@ -36,6 +35,9 @@ export const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleClick = () => setShow(!show);
 
   const handleLogin = async () => {
     try {
@@ -56,6 +58,7 @@ export const Login = () => {
         position: "top",
       });
       if (res.data.success) {
+        dispatch(loginSuccess(res.data.user));
         navigate("/home");
       }
     } catch (error) {
@@ -80,15 +83,15 @@ export const Login = () => {
         }
       );
 
-      toast({
-        title: "Logout Successful",
-        // description: `Welcome back!`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
       if (res.data.success) {
+        dispatch(logout()); // FIXED: call logout() instead of passing reference
+        toast({
+          title: "Logout Successful",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
         navigate("/");
       }
     } catch (error) {

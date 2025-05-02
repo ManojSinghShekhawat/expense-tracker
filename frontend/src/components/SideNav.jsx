@@ -13,6 +13,7 @@ import {
   DrawerBody,
   Input,
   DrawerFooter,
+  Image,
 } from "@chakra-ui/react";
 import React from "react";
 import { CgMenuGridR } from "react-icons/cg";
@@ -32,6 +33,7 @@ import {
 import { FaDownload } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const SideNav = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,7 +54,9 @@ const SideNav = () => {
         <DrawerContent>
           <Box>
             <DrawerCloseButton />
-            <DrawerHeader>LOGO</DrawerHeader>
+            <DrawerHeader>
+              <Image src={logo} h={"7rem"} />
+            </DrawerHeader>
 
             <DrawerBody>
               <VStack

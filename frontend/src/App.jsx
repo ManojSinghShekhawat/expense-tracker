@@ -1,4 +1,4 @@
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import SideNav from "./components/SideNav";
@@ -6,56 +6,18 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Accounts from "./pages/Accounts";
 import Budgets from "./pages/Budgets";
 import Transactions from "./pages/Transactions";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import LandingPage from "./components/LandingPage";
 
-const ProtectedRoute = ({ isAuthenticated, children }) => {
-  if (!isAuthenticated) {
-    return <Navigate to="/" />;
-  }
-  return children;
+import LandingPage from "./components/LandingPage";
+import { useSelector } from "react-redux";
+import { authCheck } from "./redux/slices/authSlice";
+
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  return isAuthenticated ? children : <Navigate to="/" />;
 };
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const authStatus = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:4000/api/v1/user/authcheck",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
-        // console.log(res);
-        setIsAuthenticated(res.data.success);
-      } catch (error) {
-        setIsAuthenticated(false);
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    authStatus();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-      />
-    );
-  }
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
     <>

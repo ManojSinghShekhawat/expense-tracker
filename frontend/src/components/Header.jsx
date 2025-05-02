@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Box, HStack, Text, Spinner } from "@chakra-ui/react";
+import React from "react";
+import { Box, HStack } from "@chakra-ui/react";
 import SideNav from "./SideNav";
 import { Login } from "./Login";
-import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return (
     <Box
       display={"flex"}
@@ -17,8 +18,8 @@ const Header = () => {
       zIndex="1000"
     >
       <HStack>
-        <SideNav />
-        <Text>Overview</Text>
+        {isAuthenticated ? <SideNav /> : ""}
+        {/* <Text>Overview</Text> */}
       </HStack>
       <HStack>
         <Login />
