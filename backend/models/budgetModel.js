@@ -6,7 +6,7 @@ const budgetSchema = new Schema(
     user: {
       type: Types.ObjectId,
       ref: "User",
-      //   required: true,
+      required: true,
     },
     category: {
       type: String, // e.g., "Groceries", "Travel", "Shopping"
@@ -14,7 +14,7 @@ const budgetSchema = new Schema(
     },
     limit: {
       type: Number, // Budget limit for the category
-      required: true,
+      // required: true,
     },
     period: {
       type: String,
@@ -32,6 +32,10 @@ const budgetSchema = new Schema(
     //   ref: "Account",
     // },
     spent: {
+      type: Number,
+      default: 0,
+    },
+    availableBalance: {
       type: Number,
       default: 0,
     },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Select } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -17,9 +17,11 @@ import {
   FormLabel,
   Input,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 
 const ExpenseInsert = () => {
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selected, setSelected] = useState(null);
   const [transactionData, setTransactionData] = useState({
@@ -27,8 +29,45 @@ const ExpenseInsert = () => {
     category: "",
     type: "",
     description: "",
-    date: "",
+    date: new Date().toISOString().split("T")[0],
+    from: "",
+    to: "",
   });
+  const [accounts, setAccounts] = useState([]);
+  const [budget, setBudget] = useState([]);
+  useEffect(() => {
+    const getAccounts = async () => {
+      const res = await axios.get("http://localhost:4000/api/v1/account", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      const account = await res.data.accounts;
+
+      setAccounts(account);
+    };
+
+    getAccounts();
+  }, []);
+
+  useEffect(() => {
+    const getBudgets = async () => {
+      const res = await axios.get("http://localhost:4000/api/v1/budget", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      const budgets = await res.data.budgets;
+
+      setBudget(budgets);
+    };
+
+    getBudgets();
+  }, []);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -50,11 +89,38 @@ const ExpenseInsert = () => {
     setSelected(type);
   };
   //saving transaction in DB
-  const saveTransaction = () => {
-    const res = axios.post(
-      "http://localhost:4000/api/v1/transaction/new",
-      transactionData
-    );
+  const saveTransaction = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/v1/transaction/new",
+
+        transactionData,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      toast({
+        title: "Transaction added",
+        description: `Transaction added`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error) {
+      toast({
+        title: "Transaction not added",
+        description: error.response?.data?.message || "Something went wrong",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    }
   };
 
   return (
@@ -102,10 +168,12 @@ const ExpenseInsert = () => {
                 value={transactionData.category}
                 onChange={changeHandler}
               >
+                {budget?.map((budget) => (
+                  <option key={budget._id} value={budget.category}>
+                    {budget.category}
+                  </option>
+                ))}
                 <option value={"salary"}>Salary</option>
-                <option value={"food"}>Food</option>
-                <option value={"groccery"}>Groccery</option>
-                <option value={"travel"}>Travel</option>
               </Select>
               <FormLabel>Date</FormLabel>
               <Input
@@ -117,6 +185,7 @@ const ExpenseInsert = () => {
                 }
                 onChange={changeHandler}
               />
+
               <ButtonGroup>
                 <Button
                   value={"income"}
@@ -138,6 +207,35 @@ const ExpenseInsert = () => {
                   Expense
                 </Button>
               </ButtonGroup>
+              {selected === "income" ? (
+                <Select
+                  placeholder="Choose Account"
+                  name="to"
+                  value={transactionData.to}
+                  onChange={changeHandler}
+                  required
+                >
+                  {accounts?.map((account) => (
+                    <option key={account._id} value={account.name}>
+                      {account.name}
+                    </option>
+                  ))}
+                </Select>
+              ) : (
+                <Select
+                  placeholder="Choose Account"
+                  name="from"
+                  value={transactionData.from}
+                  onChange={changeHandler}
+                  required
+                >
+                  {accounts?.map((account) => (
+                    <option key={account._id} value={account.name}>
+                      {account.name}
+                    </option>
+                  ))}
+                </Select>
+              )}
             </FormControl>
           </ModalBody>
 

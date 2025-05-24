@@ -22,7 +22,14 @@ export const SummaryCard = ({ balance }) => {
   useEffect(() => {
     const fetchBalance = async () => {
       const res = await axios.get(
-        "http://localhost:4000/api/v1/transaction/balance"
+        "http://localhost:4000/api/v1/transaction/balance",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
       const currentMonthBalance = [
         { name: "Income", value: res.data.currentMonthTotalIncome },

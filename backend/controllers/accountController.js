@@ -4,9 +4,8 @@ const ErrorHandler = require("../utils/errorHandler");
 
 //add new account
 const addAccount = asyncErrorHandler(async (req, res, next) => {
-  const newAccount = new AccountModel(req.body);
+  const newAccount = new AccountModel({ ...req.body, user: req.user.id });
   const createdAccount = await newAccount.save();
-
   return res.status(201).json({
     success: true,
     createdAccount,
@@ -15,7 +14,7 @@ const addAccount = asyncErrorHandler(async (req, res, next) => {
 
 //get accounts
 const getAccounts = asyncErrorHandler(async (req, res, next) => {
-  const accounts = await AccountModel.find();
+  const accounts = await AccountModel.find({ user: req.user.id });
   return res.status(200).json({
     success: true,
     accounts,
@@ -49,9 +48,12 @@ const updateAccount = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
-//get accounts
+//get cc accounts
 const getCreditcards = asyncErrorHandler(async (req, res, next) => {
-  const cerditCards = await AccountModel.find({ type: "creditCard" });
+  const cerditCards = await AccountModel.find({
+    type: "creditCard",
+    user: req.user.id,
+  });
   return res.status(200).json({
     success: true,
     cerditCards,

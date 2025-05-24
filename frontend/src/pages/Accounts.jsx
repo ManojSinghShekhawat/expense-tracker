@@ -27,6 +27,7 @@ import {
 import { BsBank, BsPlusLg } from "react-icons/bs";
 import { MdDelete, MdAccountBalanceWallet, MdCreditCard } from "react-icons/md";
 import axios from "axios";
+import ExpenseInsert from "../components/ExpenseInsert";
 
 const Accounts = () => {
   const [accounts, setAccounts] = useState([]);
@@ -51,21 +52,34 @@ const Accounts = () => {
   const [selectedAccountId, setSelectedAccountId] = useState(null);
 
   useEffect(() => {
-    const getAccouts = async () => {
-      const res = await axios.get("http://localhost:4000/api/v1/account");
+    const getAccounts = async () => {
+      const res = await axios.get("http://localhost:4000/api/v1/account", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       const account = await res.data.accounts;
       setAccounts(account);
     };
 
-    getAccouts();
+    getAccounts();
   }, []);
 
   const accountDeleteHandler = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/api/v1/account/${id}`
+        `http://localhost:4000/api/v1/account/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
-      console.log(res.data);
+
       setAccounts((prev) => prev.filter((acc) => acc._id !== id));
     } catch (error) {
       console.log(error);
@@ -84,7 +98,14 @@ const Accounts = () => {
     try {
       const res = await axios.post(
         "http://localhost:4000/api/v1/account/add",
-        addedAccount
+        addedAccount,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
 
       const newAccount = res.data.createdAccount;
@@ -267,6 +288,7 @@ const Accounts = () => {
           </CardHeader>
         </Card>
       ))}
+      {/* <ExpenseInsert /> */}
     </Stack>
   );
 };

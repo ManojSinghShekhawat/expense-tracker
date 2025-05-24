@@ -1,4 +1,7 @@
 import { Box, Heading, Stack } from "@chakra-ui/react";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -9,22 +12,45 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "Jan25", balance: 15000 },
-  { name: "Feb25", balance: 7000 },
-  { name: "Mar25", balance: 8000 },
-  { name: "Apr25", balance: 6500 },
-  { name: "May25", balance: 9000 },
-  { name: "Jun25", balance: 7500 },
-  { name: "Jul25", balance: 8200 },
-  { name: "Aug25", balance: 8800 },
-  { name: "Sep25", balance: 920 },
-  { name: "Oct25", balance: -1100 },
-  { name: "Nov25", balance: 970 },
-  { name: "Dec25", balance: 10500 },
-];
-
 const TwelveMonthBalance = () => {
+  const [yearData, setYearData] = useState([]);
+  useEffect(() => {
+    const getYearlyBalance = async () => {
+      const res = await axios.get(
+        "http://localhost:4000/api/v1/transaction/year",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const yearBalance = await res.data.yearlyBalance;
+      setYearData(yearBalance);
+    };
+    getYearlyBalance();
+  }, []);
+
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const data = yearData.map((ele) => ({
+    name: monthNames[ele.month - 1],
+    balance: ele.netBalance,
+  }));
+
   return (
     <Stack width={"100%"} maxWidth={"50rem"}>
       <Heading fontSize={"1rem"} pl={"3rem"}>

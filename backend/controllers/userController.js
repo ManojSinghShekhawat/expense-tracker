@@ -32,10 +32,10 @@ const login = asyncErrorHandler(async (req, res, next) => {
 
 //logout a user
 const logout = asyncErrorHandler(async (req, res, next) => {
-  res.cookie("token", "", {
+  res.clearCookie("token", {
     httpOnly: true,
-    expires: new Date(0), // expire the cookie immediately
-    sameSite: "Lax",
+    sameSite: "Lax", // or 'None' if on HTTPS
+    secure: false, // true if on HTTPS
   });
   res.status(200).json({
     success: true,
@@ -46,15 +46,15 @@ const logout = asyncErrorHandler(async (req, res, next) => {
 //check Auth Status
 const authStatus = asyncErrorHandler(async (req, res, next) => {
   const { token } = req.cookies;
-  // console.log(token);
 
   if (!token) {
     return next(new ErrorHandler("user is not authorize", 404));
   }
   const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await Usermodel.findById(decodedUser.id).select("+password");
   return res.status(200).json({
     success: true,
-    decodedUser,
+    user,
     message: "user is loggedIn",
   });
 });

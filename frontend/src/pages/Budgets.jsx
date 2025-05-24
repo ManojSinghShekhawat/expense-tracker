@@ -75,9 +75,15 @@ const Budgets = () => {
   const budgetDeleteHandler = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/api/v1/budget/${id}`
+        `http://localhost:4000/api/v1/budget/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
-      console.log(res.data);
       setBudgets((prev) => prev.filter((acc) => acc._id !== id));
     } catch (error) {
       console.log(error);
@@ -87,7 +93,14 @@ const Budgets = () => {
     try {
       const res = await axios.post(
         "http://localhost:4000/api/v1/budget",
-        addedBudget
+        addedBudget,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
 
       const newBudget = res.data.savedBudget;
@@ -100,7 +113,13 @@ const Budgets = () => {
 
   useEffect(() => {
     const getBudgets = async () => {
-      const res = await axios.get("http://localhost:4000/api/v1/budget");
+      const res = await axios.get("http://localhost:4000/api/v1/budget", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       const budgets = await res.data.budgets;
 
       setBudgets(budgets);
@@ -113,6 +132,13 @@ const Budgets = () => {
     try {
       const res = await axios.put(
         `http://localhost:4000/api/v1/budget/${selectedAccountId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        },
         { limit: updatedLimit }
       );
       const updatedBudget = res.data.updatedBudget;

@@ -1,17 +1,17 @@
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Spinner, Button, Center, Stack } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import landingImg from "../assets/landingImage.png";
 import Header from "./Header";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authCheck } from "../redux/slices/authSlice";
+import { openLoginModal } from "../redux/slices/loginModalSlice";
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  console.log(isAuthenticated);
 
   useEffect(() => {
     dispatch(authCheck());
@@ -33,8 +33,21 @@ const LandingPage = () => {
       bgSize={"cover"}
       bgPosition={"center"}
       minH={"100VH"}
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
     >
-      <Header />
+      <Button
+        mt={"20rem"}
+        size={"lg"}
+        colorScheme="blue"
+        h={"5rem"}
+        w={"16rem"}
+        fontSize={"2.2rem"}
+        onClick={() => dispatch(openLoginModal())}
+      >
+        Get Started
+      </Button>
     </Box>
   );
 };

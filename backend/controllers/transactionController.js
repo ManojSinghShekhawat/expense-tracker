@@ -1,6 +1,10 @@
 const TransactionModel = require("../models/transactionModel");
+const AccountModel = require("../models/accountModel");
+const BudgetModel = require("../models/budgetModel");
 const asyncErrorHandler = require("../middleware/asyncErrorHandler");
 const ErrorHandler = require("../utils/errorHandler");
+const { updateAccount } = require("./accountController");
+const mongoose = require("mongoose");
 
 // date range function to get month wise transaction
 const getMonthRange = (monthOffSet = 0) => {
@@ -17,16 +21,94 @@ const getMonthRange = (monthOffSet = 0) => {
   );
   return { firstDate, lastDate };
 };
-//adding tranaction
+//adding tranaction with referance to account and budget
 const addTransaction = asyncErrorHandler(async (req, res) => {
-  const newTransaction = new TransactionModel(req.body);
+  const { from, to, type, amount, category } = req.body;
 
-  const savedTransaction = await newTransaction.save();
-
-  return res.status(201).json({
-    success: true,
-    savedTransaction,
+  const isCategoryAvailable = await BudgetModel.findOne({
+    category: req.body.category,
+    user: req.user.id,
   });
+
+  if (!isCategoryAvailable) {
+    const newTransaction = new TransactionModel({
+      ...req.body,
+      user: req.user.id,
+    });
+
+    if (type === "income") {
+      const updatedAccount = await AccountModel.findOneAndUpdate(
+        {
+          name: from ? from : to,
+          user: req.user.id,
+        },
+        { $inc: { balance: amount } },
+        { new: true, runValidators: true }
+      );
+    } else {
+      const updatedAccount = await AccountModel.findOneAndUpdate(
+        {
+          name: from ? from : to,
+          user: req.user.id,
+        },
+        { $inc: { balance: -amount } },
+        { new: true, runValidators: true }
+      );
+    }
+    const savedTransaction = await newTransaction.save();
+    return res.status(201).json({
+      success: true,
+      savedTransaction,
+    });
+  } else {
+    if (
+      isCategoryAvailable.limit <
+      isCategoryAvailable.spent + Number(amount)
+    ) {
+      return res.status(500).json({
+        success: false,
+        message: "Limit exhoust for this category",
+      });
+    } else {
+      const newTransaction = new TransactionModel({
+        ...req.body,
+        user: req.user.id,
+      });
+      const updatedBudget = await BudgetModel.findOneAndUpdate(
+        {
+          category: req.body.category,
+          user: req.user.id,
+        },
+        { $inc: { spent: req.body.amount } },
+        { new: true, runValidators: true }
+      );
+
+      if (type === "income") {
+        const updatedAccount = await AccountModel.findOneAndUpdate(
+          {
+            name: from ? from : to,
+            user: req.user.id,
+          },
+          { $inc: { balance: amount } },
+          { new: true, runValidators: true }
+        );
+      } else {
+        const updatedAccount = await AccountModel.findOneAndUpdate(
+          {
+            name: from ? from : to,
+            user: req.user.id,
+          },
+          { $inc: { balance: -amount } },
+          { new: true, runValidators: true }
+        );
+      }
+      const savedTransaction = await newTransaction.save();
+      return res.status(201).json({
+        success: true,
+        savedTransaction,
+      });
+    }
+  }
 });
 // ---------------------------------------------------------------------------------------------
 //delete a transcation
@@ -109,11 +191,14 @@ const getFilterTransaction = asyncErrorHandler(async (req, res, next) => {
 
 // ----------------------------------------------------------------------------------------------------
 // get balance (total income and total expense)
-const getTransactions = async (monthOffSet = 0) => {
+const getTransactions = async (monthOffSet = 0, user) => {
   const { firstDate, lastDate } = getMonthRange(monthOffSet);
+
   const transactions = await TransactionModel.find({
+    user,
     date: { $gte: firstDate, $lte: lastDate },
   });
+
   return {
     income: transactions.filter((t) => t.type === "income"),
     expense: transactions.filter((t) => t.type === "expense"),
@@ -121,11 +206,17 @@ const getTransactions = async (monthOffSet = 0) => {
 };
 
 const getBalance = asyncErrorHandler(async (req, res, next) => {
-  const currentMonthTrans = await getTransactions(0);
-  const lastMonthTrans = await getTransactions(-1);
+  const currentMonthTrans = await getTransactions(0, req.user.id);
+  const lastMonthTrans = await getTransactions(-1, req.user.id);
 
-  const income = await TransactionModel.find({ type: "income" });
-  const expense = await TransactionModel.find({ type: "expense" });
+  const income = await TransactionModel.find({
+    type: "income",
+    user: req.user.id,
+  });
+  const expense = await TransactionModel.find({
+    user: req.user.id,
+    type: "expense",
+  });
   const totalIncome =
     income.length != 0 ? income.reduce((sum, doc) => sum + doc.amount, 0) : 0;
   const totalExpense =
@@ -174,10 +265,72 @@ const get7DaysTransactions = asyncErrorHandler(async (req, res, next) => {
 
   const tranactions = await TransactionModel.find({
     date: { $gte: todayMinusSix, $lte: today },
+    user: req.user.id,
   });
   res.status(200).json({
     success: true,
     tranactions,
+  });
+});
+
+// ------------------------------------------------------------------------------------------------------
+// get last12 month balance
+const getYearBalance = asyncErrorHandler(async (req, res, next) => {
+  const today = new Date();
+  const lastYear = new Date();
+  lastYear.setFullYear(today.getFullYear() - 1);
+
+  const yearlyBalance = await TransactionModel.aggregate([
+    {
+      $match: {
+        user: new mongoose.Types.ObjectId(req.user.id),
+        date: { $gte: lastYear, $lte: today },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          month: { $month: "$date" },
+          year: { $year: "$date" },
+        },
+        totalIncome: {
+          $sum: {
+            $cond: [{ $eq: ["$type", "income"] }, "$amount", 0],
+          },
+        },
+        totalExpense: {
+          $sum: {
+            $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0],
+          },
+        },
+        balance: {
+          $sum: {
+            $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        year: "$_id.year",
+        month: "$_id.month",
+        totalIncome: 1,
+        totalExpense: 1,
+        netBalance: { $subtract: ["$totalIncome", "$totalExpense"] },
+      },
+    },
+    {
+      $sort: {
+        year: 1,
+        month: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    success: true,
+    yearlyBalance,
   });
 });
 
@@ -190,4 +343,5 @@ module.exports = {
   get7DaysTransactions,
   getAllTransaction,
   getFilterTransaction,
+  getYearBalance,
 };

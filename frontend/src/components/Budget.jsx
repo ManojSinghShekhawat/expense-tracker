@@ -31,7 +31,13 @@ const Budget = () => {
   useEffect(() => {
     const getBudgets = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/v1/budget");
+        const res = await axios.get("http://localhost:4000/api/v1/budget", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         setBudgets(res.data.budgets);
       } catch (error) {
         console.log(error);

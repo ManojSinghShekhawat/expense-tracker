@@ -22,9 +22,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, logout } from "../redux/slices/authSlice";
+import {
+  closeLoginModal,
+  openLoginModal,
+} from "../redux/slices/loginModalSlice";
 
 export const Login = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [show, setShow] = useState(false);
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -34,8 +37,19 @@ export const Login = () => {
     email: "",
     password: "",
   });
+  const [signupData, setSignupData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const showLoginModal = useSelector(
+    (state) => state.loginModal.showLoginModal
+  );
+  const onClose = () => dispatch(closeLoginModal());
 
   const handleClick = () => setShow(!show);
 
@@ -73,6 +87,40 @@ export const Login = () => {
     }
   };
 
+  const handleSignup = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/v1/user/signup",
+        signupData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      toast({
+        title: "Signup Successful",
+        description: `Welcome!`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      if (res.data.success) {
+        dispatch(loginSuccess(res.data.user));
+        navigate("/home");
+      }
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: error.response?.data?.message || "Something went wrong",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    }
+  };
+
   const handleLogout = async () => {
     try {
       const res = await axios.get(
@@ -84,7 +132,7 @@ export const Login = () => {
       );
 
       if (res.data.success) {
-        dispatch(logout()); // FIXED: call logout() instead of passing reference
+        dispatch(logout());
         toast({
           title: "Logout Successful",
           status: "success",
@@ -112,6 +160,10 @@ export const Login = () => {
       ...prev,
       [name]: value,
     }));
+    setSignupData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -123,19 +175,12 @@ export const Login = () => {
       >
         Logout
       </Button>
-      <Button
-        onClick={onOpen}
-        colorScheme="#2B6CB0"
-        // display={isAuthenticated ? "none" : ""}
-      >
-        Login/Signup
-      </Button>
 
       {isLogin ? (
         <Modal
           initialFocusRef={initialRef}
           finalFocusRef={finalRef}
-          isOpen={isOpen}
+          isOpen={showLoginModal}
           onClose={onClose}
         >
           <ModalOverlay />
@@ -145,12 +190,24 @@ export const Login = () => {
             <ModalBody pb={6}>
               <FormControl>
                 <FormLabel>Name</FormLabel>
-                <Input ref={initialRef} placeholder="Name" />
+                <Input
+                  ref={initialRef}
+                  placeholder="Name"
+                  name="name"
+                  value={signupData.name}
+                  onChange={changeHandler}
+                />
               </FormControl>
 
               <FormControl mt={4}>
                 <FormLabel>E-Mail</FormLabel>
-                <Input placeholder="E-Mail" type="email" />
+                <Input
+                  placeholder="E-Mail"
+                  type="email"
+                  name="email"
+                  value={signupData.email}
+                  onChange={changeHandler}
+                />
               </FormControl>
               <FormControl mt={4}>
                 <FormLabel>Password</FormLabel>
@@ -159,6 +216,9 @@ export const Login = () => {
                     pr="4.5rem"
                     type={show ? "text" : "password"}
                     placeholder="Enter password"
+                    name="password"
+                    value={signupData.password}
+                    onChange={changeHandler}
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -181,7 +241,7 @@ export const Login = () => {
             </ModalBody>
 
             <ModalFooter>
-              <Button colorScheme="blue" mr={3}>
+              <Button colorScheme="blue" mr={3} onClick={handleSignup}>
                 Signup
               </Button>
             </ModalFooter>
@@ -191,7 +251,7 @@ export const Login = () => {
         <Modal
           initialFocusRef={initialRef}
           finalFocusRef={finalRef}
-          isOpen={isOpen}
+          isOpen={showLoginModal}
           onClose={onClose}
         >
           <ModalOverlay />

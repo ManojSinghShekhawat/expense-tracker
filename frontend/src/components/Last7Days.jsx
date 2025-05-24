@@ -20,7 +20,14 @@ const Last7Days = () => {
   useEffect(() => {
     const fetchLast7DaysTrans = async () => {
       const res = await axios.get(
-        "http://localhost:4000/api/v1/transaction/last7days"
+        "http://localhost:4000/api/v1/transaction/last7days",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
       const tranactions = res.data.tranactions;
       const getLast7Days = () => {
@@ -61,12 +68,6 @@ const Last7Days = () => {
   }, []);
 
   return (
-    // <Box
-    //   display={"flex"}
-    //   alignItems={"center"}
-    //   justifyContent={"center"}
-    //   width={"40rem"}
-    // >
     <Stack width={"100%"} maxWidth={"40rem"}>
       <Heading fontSize={"1rem"} pl={"3rem"}>
         Last 7 Days
@@ -98,7 +99,6 @@ const Last7Days = () => {
         </BarChart>
       </ResponsiveContainer>
     </Stack>
-    // </Box>
   );
 };
 

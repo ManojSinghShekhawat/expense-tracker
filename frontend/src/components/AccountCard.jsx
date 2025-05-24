@@ -18,7 +18,13 @@ const AccountCard = () => {
   useEffect(() => {
     try {
       const getAccounts = async () => {
-        const res = await axios.get("http://localhost:4000/api/v1/account");
+        const res = await axios.get("http://localhost:4000/api/v1/account", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         setAccounts(res.data.accounts);
       };
       getAccounts();
@@ -32,8 +38,22 @@ const AccountCard = () => {
       <Box width="500px">
         <Card>
           <CardHeader>
-            <Heading size="sm" mb={1}>
-              Accounts
+            <Heading
+              size="sm"
+              mb={1}
+              display={"flex"}
+              justifyContent={"space-between"}
+            >
+              <Text>Accounts</Text>
+              <Text color={"green.300"}>
+                {Number(
+                  accounts.reduce(
+                    (acc, curr) =>
+                      acc + (curr.type === "bank" ? curr.balance : 0),
+                    0
+                  )
+                )}
+              </Text>
             </Heading>
           </CardHeader>
           <VStack
@@ -46,17 +66,23 @@ const AccountCard = () => {
           >
             {accounts.map((acc, index) => (
               <React.Fragment key={acc._id}>
-                <HStack justifyContent={"space-between"} width={"full"}>
-                  <CardBody>
-                    <Text position="relative">{acc.name}</Text>
-                  </CardBody>
-                  <CardBody>
-                    <Text color={"green"} textAlign="right">
-                      ₹ {acc.balance}
-                    </Text>
-                  </CardBody>
-                </HStack>
-                <Divider borderColor="gray.400" borderBottomWidth="2px" />
+                {acc.type == "bank" ? (
+                  <>
+                    <HStack justifyContent={"space-between"} width={"full"}>
+                      <CardBody>
+                        <Text position="relative">{acc.name}</Text>
+                      </CardBody>
+                      <CardBody>
+                        <Text color={"green"} textAlign="right">
+                          ₹ {acc.balance}
+                        </Text>
+                      </CardBody>
+                    </HStack>
+                    <Divider borderColor="gray.400" borderBottomWidth="2px" />
+                  </>
+                ) : (
+                  ""
+                )}
               </React.Fragment>
             ))}
           </VStack>

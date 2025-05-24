@@ -17,10 +17,7 @@ const Header = () => {
       top="0"
       zIndex="1000"
     >
-      <HStack>
-        {isAuthenticated ? <SideNav /> : ""}
-        {/* <Text>Overview</Text> */}
-      </HStack>
+      <HStack>{isAuthenticated ? <SideNav /> : ""}</HStack>
       <HStack>
         <Login />
       </HStack>

@@ -21,7 +21,14 @@ const CredditCards = () => {
   useEffect(() => {
     const getCreditCards = async () => {
       const res = await axios.get(
-        "http://localhost:4000/api/v1/account/creditcards"
+        "http://localhost:4000/api/v1/account/creditcards",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
       setCreditCards(res.data.cerditCards);
     };
@@ -29,59 +36,75 @@ const CredditCards = () => {
   }, []);
 
   return (
-    <HStack>
-      <Box position="relative" width="500px">
-        <Card>
-          <CardHeader>
-            <Heading size="sm" mb={1}>
-              Credit Cards
-            </Heading>
-          </CardHeader>
-          <VStack
-            alignItems={"center"}
-            mt={-8}
-            position="relative"
-            maxH={200}
-            overflow={"scroll"}
-            overflowX={"hidden"}
-          >
-            {creditCards.map((card) => (
-              <React.Fragment key={card._id}>
-                <HStack
-                  alignItems={"center"}
-                  position="relative"
-                  width={"full"}
+    <>
+      {creditCards.length == 0 ? (
+        ""
+      ) : (
+        <HStack>
+          <Box position="relative" width="500px">
+            <Card>
+              <CardHeader>
+                <Heading
+                  size="sm"
+                  mb={1}
+                  display={"flex"}
+                  justifyContent={"space-between"}
                 >
-                  <CardBody>
-                    <Text position="relative" fontWeight={"600"}>
-                      {card.name}
-                    </Text>
-                  </CardBody>
+                  <Text>Credit Cards</Text>
+                  <Text color={"green.300"}>
+                    {Number(
+                      creditCards.reduce((acc, curr) => acc + curr.balance, 0)
+                    )}
+                  </Text>
+                </Heading>
+              </CardHeader>
+              <VStack
+                alignItems={"center"}
+                mt={-8}
+                position="relative"
+                maxH={200}
+                overflow={"scroll"}
+                overflowX={"hidden"}
+              >
+                {creditCards.map((card) => (
+                  <React.Fragment key={card._id}>
+                    <HStack
+                      alignItems={"center"}
+                      position="relative"
+                      width={"full"}
+                    >
+                      <CardBody>
+                        <Text position="relative" fontWeight={"600"}>
+                          {card.name}
+                        </Text>
+                      </CardBody>
 
-                  <CardBody>
-                    <Text color={"red"} textAlign="right">
-                      ₹ {card.balance}
-                    </Text>
-                  </CardBody>
-                </HStack>
-                <HStack>
-                  <Box width="500px" p={2}>
-                    <Progress
-                      value={spentPer}
-                      size="sm"
-                      colorScheme={spentPer > 60 ? "red" : "green"}
-                      borderRadius={"full"}
-                      ml={"5rem"}
-                    />
-                  </Box>
-                  <Text mr={"5rem"}>{spentPer}%</Text>
-                </HStack>
-              </React.Fragment>
-            ))}
-          </VStack>
-        </Card>
-      </Box>
-    </HStack>
+                      <CardBody>
+                        <Text color={"red"} textAlign="right">
+                          ₹ {card.balance}
+                        </Text>
+                      </CardBody>
+                    </HStack>
+                    <HStack>
+                      <Box width="500px" p={2}>
+                        <Progress
+                          value={spentPer}
+                          size="sm"
+                          colorScheme={spentPer > 60 ? "red" : "green"}
+                          borderRadius={"full"}
+                          ml={"5rem"}
+                        />
+                      </Box>
+                      <Text mr={"5rem"}>{spentPer}%</Text>
+                    </HStack>
+                  </React.Fragment>
+                ))}
+              </VStack>
+            </Card>
+          </Box>
+        </HStack>
+      )}
+    </>
   );
 };
 

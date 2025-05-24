@@ -4,7 +4,7 @@ const ErrorHandler = require("../utils/errorHandler");
 
 //create new budget
 const creatBudget = asyncErrorHandler(async (req, res, next) => {
-  const budget = new BudgetModel(req.body);
+  const budget = new BudgetModel({ ...req.body, user: req.user.id });
   const savedBudget = await budget.save();
 
   res.status(201).json({
@@ -15,7 +15,7 @@ const creatBudget = asyncErrorHandler(async (req, res, next) => {
 
 //get budgets
 const getBudgets = asyncErrorHandler(async (req, res, next) => {
-  const budgets = await BudgetModel.find();
+  const budgets = await BudgetModel.find({ user: req.user.id });
   if (!budgets) {
     next(new asyncErrorHandler("No budget yet", 404));
   }
@@ -46,7 +46,7 @@ const updateBudget = asyncErrorHandler(async (req, res, next) => {
   const updatedBudget = await BudgetModel.findByIdAndUpdate(id, {
     $set: { limit: limit },
   });
-  if (!updatedBudgets) {
+  if (!updatedBudget) {
     next(new ErrorHandler("No Budget Found", 404));
   }
   return res.status(201).json({

@@ -37,7 +37,13 @@ const Transactions = () => {
 
   useEffect(() => {
     const getAllTransactions = async () => {
-      const res = await axios.get("http://localhost:4000/api/v1/transaction");
+      const res = await axios.get("http://localhost:4000/api/v1/transaction", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       setTransactions(res.data.tranactions);
     };
 
@@ -62,10 +68,16 @@ const Transactions = () => {
     try {
       const res = await axios.post(
         "http://localhost:4000/api/v1/transaction/filteredtransactions",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        },
         filterData
       );
       setTransactions(res.data.transactions);
-      console.log(res.data.transactions);
     } catch (error) {
       console.log(error);
     }

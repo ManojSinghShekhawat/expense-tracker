@@ -4,9 +4,9 @@ const { Schema, model, Types } = mongoose;
 const accountSchema = new Schema(
   {
     user: {
-      type: Types.ObjectId, // Use Types.ObjectId
-      ref: "User", // Ref should be a string: the model name
-      // required: true,        // Optional but recommended
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     name: {
       type: String,

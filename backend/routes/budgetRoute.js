@@ -6,8 +6,15 @@ const {
   updateBudget,
 } = require("../controllers/budgetController");
 const router = express.Router();
+const { isAuthenticated } = require("../utils/isAuthenticated");
 
-router.route("/").post(creatBudget).get(getBudgets);
-router.route("/:id").delete(deleteBudget).put(updateBudget);
+router
+  .route("/")
+  .post(isAuthenticated, creatBudget)
+  .get(isAuthenticated, getBudgets);
+router
+  .route("/:id")
+  .delete(isAuthenticated, deleteBudget)
+  .put(isAuthenticated, updateBudget);
 
 module.exports = router;
