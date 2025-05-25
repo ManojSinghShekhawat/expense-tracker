@@ -31,13 +31,16 @@ const Budget = () => {
   useEffect(() => {
     const getBudgets = async () => {
       try {
-        const res = await axios.get(`${process.env.VITE_BACK_END_URL}/budget`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACK_END_URL}/budget`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
         setBudgets(res.data.budgets);
       } catch (error) {
         console.log(error);

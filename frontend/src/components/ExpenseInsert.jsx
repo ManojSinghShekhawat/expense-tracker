@@ -37,13 +37,16 @@ const ExpenseInsert = () => {
   const [budget, setBudget] = useState([]);
   useEffect(() => {
     const getAccounts = async () => {
-      const res = await axios.get(`${process.env.VITE_BACK_END_URL}/account`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACK_END_URL}/account`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       const account = await res.data.accounts;
 
       setAccounts(account);
@@ -54,13 +57,16 @@ const ExpenseInsert = () => {
 
   useEffect(() => {
     const getBudgets = async () => {
-      const res = await axios.get(`${process.env.VITE_BACK_END_URL}/budget`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACK_END_URL}/budget`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       const budgets = await res.data.budgets;
 
       setBudget(budgets);
@@ -92,7 +98,7 @@ const ExpenseInsert = () => {
   const saveTransaction = async () => {
     try {
       const res = await axios.post(
-        `${process.env.VITE_BACK_END_URL}/new`,
+        `${import.meta.env.VITE_BACK_END_URL}/new`,
 
         transactionData,
         {

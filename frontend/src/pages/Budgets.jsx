@@ -113,13 +113,16 @@ const Budgets = () => {
 
   useEffect(() => {
     const getBudgets = async () => {
-      const res = await axios.get(`${process.env.VITE_BACK_END_URL}/budget`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACK_END_URL}/budget`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       const budgets = await res.data.budgets;
 
       setBudgets(budgets);
@@ -131,7 +134,7 @@ const Budgets = () => {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `${process.env.VITE_BACK_END_URL}/budget/${selectedAccountId}`,
+        `${import.meta.env.VITE_BACK_END_URL}/budget/${selectedAccountId}`,
         {
           method: "PUT",
           headers: {
