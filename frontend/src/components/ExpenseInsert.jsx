@@ -98,7 +98,7 @@ const ExpenseInsert = () => {
   const saveTransaction = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/v1/new`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/transaction/new`,
 
         transactionData,
         {
