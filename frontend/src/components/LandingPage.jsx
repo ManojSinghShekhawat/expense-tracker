@@ -13,9 +13,9 @@ const LandingPage = () => {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(authCheck());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(authCheck());
+  // }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated) {

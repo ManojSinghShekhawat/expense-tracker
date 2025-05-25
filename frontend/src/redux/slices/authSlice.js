@@ -4,7 +4,7 @@ import axios from "axios";
 export const authCheck = createAsyncThunk("auth/check", async (_, thunkAPI) => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_BACK_END_URL}/user/authcheck`,
+      `${import.meta.env.VITE_BACK_END_URL}/api/v1/user/authcheck`,
       {
         method: "GET",
         headers: {
