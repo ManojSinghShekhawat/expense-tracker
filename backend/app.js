@@ -8,13 +8,11 @@ const transactionRoute = require("./routes/transactionRoute");
 const userRoute = require("./routes/userRoute");
 const accountRoute = require("./routes/accountRoute");
 const budgetRoute = require("./routes/budgetRoute");
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin:
-      "https://expense-tracker-7fwa-fwz2tzwaf-manojsinghshekhawats-projects.vercel.app",
+    origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
     credentials: true,
   })
 );

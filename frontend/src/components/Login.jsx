@@ -52,6 +52,7 @@ export const Login = () => {
   const onClose = () => dispatch(closeLoginModal());
 
   const handleClick = () => setShow(!show);
+  console.log(import.meta.env.VITE_BACK_END_URL);
 
   const handleLogin = async () => {
     try {
