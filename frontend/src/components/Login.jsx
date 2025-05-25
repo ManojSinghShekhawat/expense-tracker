@@ -56,7 +56,7 @@ export const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        `${process.env.BACK_END_URL}/user/login`,
+        `${process.env.VITE_BACK_END_URL}/user/login`,
         logindata,
         {
           withCredentials: true,
@@ -90,7 +90,7 @@ export const Login = () => {
   const handleSignup = async () => {
     try {
       const res = await axios.post(
-        `${process.env.BACK_END_URL}/user/signup`,
+        `${process.env.VITE_BACK_END_URL}/user/signup`,
         signupData,
         {
           withCredentials: true,
@@ -124,7 +124,7 @@ export const Login = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.get(
-        `${process.env.BACK_END_URL}/user/logout`,
+        `${process.env.VITE_BACK_END_URL}/user/logout`,
 
         {
           withCredentials: true,

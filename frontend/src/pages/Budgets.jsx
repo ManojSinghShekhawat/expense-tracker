@@ -113,7 +113,7 @@ const Budgets = () => {
 
   useEffect(() => {
     const getBudgets = async () => {
-      const res = await axios.get(`${process.env.BACK_END_URL}/budget`, {
+      const res = await axios.get(`${process.env.VITE_BACK_END_URL}/budget`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ const Budgets = () => {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `${process.env.BACK_END_URL}/budget/${selectedAccountId}`,
+        `${process.env.VITE_BACK_END_URL}/budget/${selectedAccountId}`,
         {
           method: "PUT",
           headers: {

@@ -31,7 +31,7 @@ const Budget = () => {
   useEffect(() => {
     const getBudgets = async () => {
       try {
-        const res = await axios.get(`${process.env.BACK_END_URL}/budget`, {
+        const res = await axios.get(`${process.env.VITE_BACK_END_URL}/budget`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

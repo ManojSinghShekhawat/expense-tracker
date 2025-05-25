@@ -28,7 +28,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBalance = async () => {
       const res = await axios.get(
-        `${process.env.BACK_END_URL}/transaction/balance`,
+        `${process.env.VITE_BACK_END_URL}/transaction/balance`,
         {
           method: "GET",
           headers: {

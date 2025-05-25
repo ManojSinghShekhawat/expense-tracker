@@ -18,13 +18,16 @@ const AccountCard = () => {
   useEffect(() => {
     try {
       const getAccounts = async () => {
-        const res = await axios.get(`${process.env.BACK_END_URL}/account`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.VITE_BACK_END_URL}/account`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
         setAccounts(res.data.accounts);
       };
       getAccounts();

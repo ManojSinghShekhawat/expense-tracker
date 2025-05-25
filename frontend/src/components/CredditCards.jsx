@@ -20,13 +20,16 @@ const CredditCards = () => {
   const [creditCards, setCreditCards] = useState([]);
   useEffect(() => {
     const getCreditCards = async () => {
-      const res = await axios.get(`${process.env.BACK_END_URL}/creditcards`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${process.env.VITE_BACK_END_URL}/creditcards`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       setCreditCards(res.data.cerditCards);
     };
     getCreditCards();

@@ -17,7 +17,7 @@ const TwelveMonthBalance = () => {
   useEffect(() => {
     const getYearlyBalance = async () => {
       const res = await axios.get(
-        `${process.env.BACK_END_URL}/transaction/year`,
+        `${process.env.VITE_BACK_END_URL}/transaction/year`,
         {
           method: "GET",
           headers: {
