@@ -69,15 +69,15 @@ const Transactions = () => {
       const res = await axios.post(
         `${
           import.meta.env.VITE_BACK_END_URL
-        }/api/v1/transaction/filteredtransactions`,
+        }/api/v1/transaction/filteredtransactions`,filterData,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
           withCredentials: true,
-        },
-        filterData
+        }
+        
       );
       setTransactions(res.data.transactions);
     } catch (error) {
