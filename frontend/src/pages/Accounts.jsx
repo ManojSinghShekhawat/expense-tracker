@@ -53,7 +53,7 @@ const Accounts = () => {
 
   useEffect(() => {
     const getAccounts = async () => {
-      const res = await axios.get("http://localhost:4000/api/v1/account", {
+      const res = await axios.get(`${import.meta.env.VITE_BACK_END_URL}/api/v1/account`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
