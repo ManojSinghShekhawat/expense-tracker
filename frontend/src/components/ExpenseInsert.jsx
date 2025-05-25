@@ -37,7 +37,7 @@ const ExpenseInsert = () => {
   const [budget, setBudget] = useState([]);
   useEffect(() => {
     const getAccounts = async () => {
-      const res = await axios.get("http://localhost:4000/api/v1/account", {
+      const res = await axios.get(`${process.env.BACK_END_URL}/account`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const ExpenseInsert = () => {
 
   useEffect(() => {
     const getBudgets = async () => {
-      const res = await axios.get("http://localhost:4000/api/v1/budget", {
+      const res = await axios.get(`${process.env.BACK_END_URL}/budget`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +92,7 @@ const ExpenseInsert = () => {
   const saveTransaction = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/v1/transaction/new",
+        `${process.env.BACK_END_URL}/new`,
 
         transactionData,
         {

@@ -67,7 +67,7 @@ const Transactions = () => {
   const handleFilter = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/v1/transaction/filteredtransactions",
+        `${process.env.BACK_END_URL}/transaction/filteredtransactions`,
         {
           method: "GET",
           headers: {

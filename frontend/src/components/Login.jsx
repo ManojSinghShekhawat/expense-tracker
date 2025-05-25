@@ -56,7 +56,7 @@ export const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/v1/user/login",
+        `${process.env.BACK_END_URL}/user/login`,
         logindata,
         {
           withCredentials: true,
@@ -90,7 +90,7 @@ export const Login = () => {
   const handleSignup = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/v1/user/signup",
+        `${process.env.BACK_END_URL}/user/signup`,
         signupData,
         {
           withCredentials: true,
@@ -124,7 +124,7 @@ export const Login = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/v1/user/logout",
+        `${process.env.BACK_END_URL}/user/logout`,
 
         {
           withCredentials: true,
