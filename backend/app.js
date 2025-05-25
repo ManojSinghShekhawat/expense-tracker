@@ -13,7 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://expense-tracker-7fwa.vercel.app",
+    origin:
+      "https://expense-tracker-7fwa-fwz2tzwaf-manojsinghshekhawats-projects.vercel.app",
     credentials: true,
   })
 );
