@@ -22,7 +22,7 @@ export const SummaryCard = ({ balance }) => {
   useEffect(() => {
     const fetchBalance = async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/transaction/balance`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/transaction/balance`,
         {
           method: "GET",
           headers: {

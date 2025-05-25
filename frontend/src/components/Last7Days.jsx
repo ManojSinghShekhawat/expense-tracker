@@ -20,7 +20,7 @@ const Last7Days = () => {
   useEffect(() => {
     const fetchLast7DaysTrans = async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/transaction/last7days`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/transaction/last7days`,
         {
           method: "GET",
           headers: {

@@ -70,7 +70,7 @@ const Accounts = () => {
   const accountDeleteHandler = async (id) => {
     try {
       const res = await axios.delete(
-        `${import.meta.env.VITE_BACK_END_URL}/account/${id}`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/account/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -97,7 +97,7 @@ const Accounts = () => {
   const handleSave = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/account/add`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/account/add`,
         addedAccount,
         {
           method: "POST",
@@ -119,7 +119,9 @@ const Accounts = () => {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `${import.meta.env.VITE_BACK_END_URL}/account/${selectedAccountId}`,
+        `${
+          import.meta.env.VITE_BACK_END_URL
+        }/api/v1/account/${selectedAccountId}`,
         { balance: updatedBalance }
       );
       const updatedAccount = res.data.updatedAccount;

@@ -38,7 +38,7 @@ const ExpenseInsert = () => {
   useEffect(() => {
     const getAccounts = async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/account`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/account`,
         {
           method: "GET",
           headers: {
@@ -58,7 +58,7 @@ const ExpenseInsert = () => {
   useEffect(() => {
     const getBudgets = async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/budget`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/budget`,
         {
           method: "GET",
           headers: {
@@ -98,7 +98,7 @@ const ExpenseInsert = () => {
   const saveTransaction = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/new`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/new`,
 
         transactionData,
         {

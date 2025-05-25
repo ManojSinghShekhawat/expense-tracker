@@ -19,7 +19,7 @@ const AccountCard = () => {
     try {
       const getAccounts = async () => {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACK_END_URL}/account`,
+          `${import.meta.env.VITE_BACK_END_URL}/api/v1/account`,
           {
             method: "GET",
             headers: {

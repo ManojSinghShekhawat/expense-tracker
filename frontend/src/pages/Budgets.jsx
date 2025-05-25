@@ -114,7 +114,7 @@ const Budgets = () => {
   useEffect(() => {
     const getBudgets = async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/budget`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/v1/budget`,
         {
           method: "GET",
           headers: {
@@ -134,7 +134,9 @@ const Budgets = () => {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `${import.meta.env.VITE_BACK_END_URL}/budget/${selectedAccountId}`,
+        `${
+          import.meta.env.VITE_BACK_END_URL
+        }/api/v1/budget/${selectedAccountId}`,
         {
           method: "PUT",
           headers: {

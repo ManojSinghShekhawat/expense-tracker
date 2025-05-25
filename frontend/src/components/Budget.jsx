@@ -32,7 +32,7 @@ const Budget = () => {
     const getBudgets = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACK_END_URL}/budget`,
+          `${import.meta.env.VITE_BACK_END_URL}/api/v1/budget`,
           {
             method: "GET",
             headers: {
