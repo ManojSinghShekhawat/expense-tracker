@@ -75,7 +75,7 @@ const Budgets = () => {
   const budgetDeleteHandler = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/api/v1/budget/${id}`,
+       `${import.meta.env.VITE_BACK_END_URL}/api/v1/budget/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -92,7 +92,7 @@ const Budgets = () => {
   const handleSave = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/v1/budget",
+       `${import.meta.env.VITE_BACK_END_URL}/api/v1/budget`,
         addedBudget,
         {
           method: "POST",
