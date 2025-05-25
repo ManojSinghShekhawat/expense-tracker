@@ -3,13 +3,16 @@ import axios from "axios";
 
 export const authCheck = createAsyncThunk("auth/check", async (_, thunkAPI) => {
   try {
-    const res = await axios.get("http://localhost:4000/api/v1/user/authcheck", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      `${import.meta.env.VITE_BACK_END_URL}/user/authcheck`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
     if (res.data.user) {
       return res.data.user;
     } else {
