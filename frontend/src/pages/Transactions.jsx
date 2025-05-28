@@ -16,7 +16,7 @@ import {
   FormControl,
   useDisclosure,
   FormLabel,
-  Input,
+  Input,InputGruop
 } from "@chakra-ui/react";
 import axios from "axios";
 import { GrNext, GrPrevious } from "react-icons/gr";
